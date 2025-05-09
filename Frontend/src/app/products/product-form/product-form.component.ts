@@ -2,8 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { ProductService, Product } from '../../services/product.service';
+import { ProductService } from '../../services/product.service';
 import { Subscription } from 'rxjs';
+import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-product-form',
