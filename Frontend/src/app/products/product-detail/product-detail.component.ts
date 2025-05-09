@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductService, Product } from '../../services/product.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-detail',
@@ -48,10 +49,11 @@ import { ProductService, Product } from '../../services/product.service';
     .error { color: red; }
   `]
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
   product: Product | null = null;
   loading = false;
   error = '';
+  private subscriptions = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -62,7 +64,7 @@ export class ProductDetailComponent implements OnInit {
     this.loading = true;
     const id = Number(this.route.snapshot.paramMap.get('id'));
     
-    this.productService.getProduct(id).subscribe({
+    const productSub = this.productService.getProduct(id).subscribe({
       next: (data) => {
         this.product = data;
         this.loading = false;
@@ -72,13 +74,14 @@ export class ProductDetailComponent implements OnInit {
         this.loading = false;
       }
     });
+    this.subscriptions.add(productSub);
   }
 
   deleteProduct(): void {
     if (!this.product?.id) return;
     
     if (confirm('Möchtest du dieses Produkt wirklich löschen?')) {
-      this.productService.deleteProduct(this.product.id).subscribe({
+      const deleteSub = this.productService.deleteProduct(this.product.id).subscribe({
         next: () => {
           window.location.href = '/products';
         },
@@ -86,6 +89,11 @@ export class ProductDetailComponent implements OnInit {
           this.error = 'Fehler beim Löschen: ' + err.message;
         }
       });
+      this.subscriptions.add(deleteSub);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

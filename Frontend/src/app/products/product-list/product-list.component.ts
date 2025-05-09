@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ProductService, Product } from '../../services/product.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -44,7 +45,8 @@ import { ProductService, Product } from '../../services/product.service';
     .error { color: red; margin: 20px 0; }
   `]
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
+  private subscriptions = new Subscription();
   products: Product[] = [];
   loading = false;
   error = '';
@@ -57,7 +59,7 @@ export class ProductListComponent implements OnInit {
 
   loadProducts(): void {
     this.loading = true;
-    this.productService.getProducts().subscribe({
+    const productsSub = this.productService.getProducts().subscribe({
       next: (data) => {
         this.products = data;
         this.loading = false;
@@ -67,13 +69,14 @@ export class ProductListComponent implements OnInit {
         this.loading = false;
       }
     });
+    this.subscriptions.add(productsSub);
   }
 
   deleteProduct(id?: number): void {
     if (!id) return;
     
     if (confirm('Möchtest du dieses Produkt wirklich löschen?')) {
-      this.productService.deleteProduct(id).subscribe({
+      const deleteSub = this.productService.deleteProduct(id).subscribe({
         next: () => {
           this.products = this.products.filter(p => p.id !== id);
         },
@@ -81,6 +84,11 @@ export class ProductListComponent implements OnInit {
           this.error = 'Fehler beim Löschen: ' + err.message;
         }
       });
+      this.subscriptions.add(deleteSub);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductService, Product } from '../../services/product.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-form',
@@ -81,13 +82,14 @@ import { ProductService, Product } from '../../services/product.service';
     .error { color: red; }
   `]
 })
-export class ProductFormComponent implements OnInit {
+export class ProductFormComponent implements OnInit, OnDestroy {
   productForm!: FormGroup;
   isEditMode = false;
   productId?: number;
   loading = false;
   error = '';
   submitted = false;
+  private subscriptions = new Subscription();
 
   constructor(
     private fb: FormBuilder,
@@ -119,7 +121,7 @@ export class ProductFormComponent implements OnInit {
 
   loadProduct(id: number): void {
     this.loading = true;
-    this.productService.getProduct(id).subscribe({
+    const productSub = this.productService.getProduct(id).subscribe({
       next: (product) => {
         this.productForm.patchValue({
           name: product.name,
@@ -135,6 +137,7 @@ export class ProductFormComponent implements OnInit {
         this.loading = false;
       }
     });
+    this.subscriptions.add(productSub);
   }
 
   onSubmit(): void {
@@ -157,8 +160,7 @@ export class ProductFormComponent implements OnInit {
     };
     
     if (this.isEditMode && this.productId) {
-      // PUT-Anfrage
-      this.productService.updateProduct(this.productId, product).subscribe({
+      const updateSub = this.productService.updateProduct(this.productId, product).subscribe({
         next: () => {
           this.router.navigate(['/products']);
         },
@@ -166,9 +168,9 @@ export class ProductFormComponent implements OnInit {
           this.error = 'Fehler beim Aktualisieren: ' + err.message;
         }
       });
+      this.subscriptions.add(updateSub);
     } else {
-      // POST-Anfrage
-      this.productService.createProduct(product).subscribe({
+      const createSub = this.productService.createProduct(product).subscribe({
         next: () => {
           this.router.navigate(['/products']);
         },
@@ -176,6 +178,11 @@ export class ProductFormComponent implements OnInit {
           this.error = 'Fehler beim Erstellen: ' + err.message;
         }
       });
+      this.subscriptions.add(createSub);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }
