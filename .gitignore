@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+db.sqlite3
+
+# Node/Angular
+node_modules/
+/dist/
+/tmp/
+/out-tsc/
+/.angular/cache
+.sass-cache/
+npm-debug.log
+yarn-error.log
+.env
+.DS_Store
