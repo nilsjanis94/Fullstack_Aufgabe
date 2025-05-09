@@ -9,46 +9,8 @@ import { Product, Stock } from '../../models/product.model';
   selector: 'app-product-detail',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  template: `
-    <div class="container" *ngIf="product">
-      <button class="back-btn" routerLink="/products">Zurück zur Liste</button>
-      
-      <div class="product-detail">
-        <h2>{{ product.name }}</h2>
-        <div class="product-meta">
-          <p class="price">Preis: {{ product.price }} €</p>
-          <p class="stock">Lagerbestand: {{ product.stock.quantity }} Stück</p>
-        </div>
-        
-        <h3>Kurzbeschreibung</h3>
-        <p>{{ product.short_description }}</p>
-        
-        <h3>Produktbeschreibung</h3>
-        <p>{{ product.product_description }}</p>
-        
-        <div class="actions">
-          <button [routerLink]="['/products/edit', product.id]">Bearbeiten</button>
-          <button (click)="deleteProduct()" class="delete-btn">Löschen</button>
-        </div>
-      </div>
-    </div>
-    
-    <div class="loading" *ngIf="loading">Produkt wird geladen...</div>
-    <div class="error" *ngIf="error">{{ error }}</div>
-  `,
-  styles: [`
-    .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-    .product-detail { border: 1px solid #ddd; padding: 20px; border-radius: 5px; margin-top: 20px; }
-    .product-meta { display: flex; justify-content: space-between; margin: 15px 0; }
-    .price { font-weight: bold; color: #e63946; }
-    .stock { color: #2a9d8f; }
-    .actions { margin-top: 30px; display: flex; gap: 15px; }
-    .actions button { padding: 8px 15px; cursor: pointer; }
-    .delete-btn { background: #e63946; color: white; border: none; }
-    .back-btn { padding: 8px 15px; cursor: pointer; }
-    .loading, .error { text-align: center; margin: 30px; }
-    .error { color: red; }
-  `]
+  templateUrl: './product-detail.component.html',
+  styleUrls: ['./product-detail.component.css']
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
   product: Product | null = null;

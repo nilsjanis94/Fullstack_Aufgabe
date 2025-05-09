@@ -1,1 +1,25 @@
-<p>product-detail works!</p>
+<div class="container" *ngIf="product">
+  <button class="back-btn" routerLink="/products">Zurück zur Liste</button>
+  
+  <div class="product-detail">
+    <h2>{{ product.name }}</h2>
+    <div class="product-meta">
+      <p class="price">Preis: {{ product.price }} €</p>
+      <p class="stock">Lagerbestand: {{ product.stock.quantity }} Stück</p>
+    </div>
+    
+    <h3>Kurzbeschreibung</h3>
+    <p>{{ product.short_description }}</p>
+    
+    <h3>Produktbeschreibung</h3>
+    <p>{{ product.product_description }}</p>
+    
+    <div class="actions">
+      <button [routerLink]="['/products/edit', product.id]">Bearbeiten</button>
+      <button (click)="deleteProduct()" class="delete-btn">Löschen</button>
+    </div>
+  </div>
+</div>
+
+<div class="loading" *ngIf="loading">Produkt wird geladen...</div>
+<div class="error" *ngIf="error">{{ error }}</div>

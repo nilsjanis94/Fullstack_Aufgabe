@@ -1,0 +1,11 @@
+.container { max-width: 800px; margin: 0 auto; padding: 20px; }
+.product-detail { border: 1px solid #ddd; padding: 20px; border-radius: 5px; margin-top: 20px; }
+.product-meta { display: flex; justify-content: space-between; margin: 15px 0; }
+.price { font-weight: bold; color: #e63946; }
+.stock { color: #2a9d8f; }
+.actions { margin-top: 30px; display: flex; gap: 15px; }
+.actions button { padding: 8px 15px; cursor: pointer; }
+.delete-btn { background: #e63946; color: white; border: none; }
+.back-btn { padding: 8px 15px; cursor: pointer; }
+.loading, .error { text-align: center; margin: 30px; }
+.error { color: red; }

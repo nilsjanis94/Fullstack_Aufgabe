@@ -10,78 +10,8 @@ import { Product } from '../../models/product.model';
   selector: 'app-product-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  template: `
-    <div class="container">
-      <button class="back-btn" routerLink="/products">Zurück zur Liste</button>
-      
-      <h2>{{ isEditMode ? 'Produkt bearbeiten' : 'Neues Produkt erstellen' }}</h2>
-      
-      <div class="loading" *ngIf="loading">Daten werden geladen...</div>
-      <div class="error" *ngIf="error">{{ error }}</div>
-      
-      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input id="name" type="text" formControlName="name">
-          <div class="error-msg" *ngIf="submitted && productForm.get('name')?.errors?.['required']">
-            Name ist erforderlich
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="short_description">Kurzbeschreibung</label>
-          <input id="short_description" type="text" formControlName="short_description">
-          <div class="error-msg" *ngIf="submitted && productForm.get('short_description')?.errors?.['required']">
-            Kurzbeschreibung ist erforderlich
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="product_description">Produktbeschreibung</label>
-          <textarea id="product_description" formControlName="product_description" rows="5"></textarea>
-          <div class="error-msg" *ngIf="submitted && productForm.get('product_description')?.errors?.['required']">
-            Produktbeschreibung ist erforderlich
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="quantity">Lagerbestand</label>
-          <input id="quantity" type="number" formControlName="quantity" min="0">
-          <div class="error-msg" *ngIf="submitted && productForm.get('quantity')?.errors?.['required']">
-            Lagerbestand ist erforderlich
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="price">Preis (€)</label>
-          <input id="price" type="number" formControlName="price" step="0.01" min="0">
-          <div class="error-msg" *ngIf="submitted && productForm.get('price')?.errors?.['required']">
-            Preis ist erforderlich
-          </div>
-        </div>
-        
-        <div class="form-actions">
-          <button type="button" routerLink="/products" class="cancel-btn">Abbrechen</button>
-          <button type="submit" class="submit-btn">{{ isEditMode ? 'Aktualisieren' : 'Erstellen' }}</button>
-        </div>
-      </form>
-    </div>
-  `,
-  styles: [`
-    .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-    .form-group { margin-bottom: 20px; }
-    label { display: block; margin-bottom: 5px; font-weight: bold; }
-    input, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
-    textarea { resize: vertical; }
-    .error-msg { color: red; margin-top: 5px; font-size: 0.9em; }
-    .form-actions { display: flex; gap: 15px; margin-top: 30px; }
-    .form-actions button { padding: 10px 20px; cursor: pointer; }
-    .submit-btn { background: #2a9d8f; color: white; border: none; }
-    .cancel-btn { background: #e9e9e9; border: 1px solid #ddd; }
-    .back-btn { padding: 8px 15px; cursor: pointer; margin-bottom: 20px; }
-    .loading, .error { margin: 20px 0; }
-    .error { color: red; }
-  `]
+  templateUrl: './product-form.component.html',
+  styleUrls: ['./product-form.component.css']
 })
 export class ProductFormComponent implements OnInit, OnDestroy {
   productForm!: FormGroup;

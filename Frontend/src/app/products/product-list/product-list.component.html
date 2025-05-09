@@ -1,1 +1,23 @@
-<p>product-list works!</p>
+<div class="container">
+  <h2>Produktliste</h2>
+  <button class="btn-create" [routerLink]="['/products/create']">Neues Produkt</button>
+  
+  <div *ngIf="loading">Produkte werden geladen...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  
+  <div class="product-grid" *ngIf="products.length > 0">
+    <div class="product-card" *ngFor="let product of products">
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.short_description }}</p>
+      <p class="price">{{ product.price }} €</p>
+      <p>Lagerbestand: {{ product.stock.quantity }}</p>
+      <div class="actions">
+        <button [routerLink]="['/products', product.id]">Details</button>
+        <button [routerLink]="['/products/edit', product.id]">Bearbeiten</button>
+        <button (click)="deleteProduct(product.id)">Löschen</button>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="products.length === 0 && !loading">Keine Produkte vorhanden.</div>
+</div>
