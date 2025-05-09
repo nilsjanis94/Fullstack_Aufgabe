@@ -17,7 +17,7 @@ import { RouterOutlet } from '@angular/router';
       </main>
       
       <footer>
-        <p>Praxistag Backend © 2024</p>
+        <p>Praxistag Backend © 2025</p>
       </footer>
     </div>
   `,
