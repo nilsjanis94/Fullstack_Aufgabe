@@ -91,5 +91,5 @@ ng serve
 - Löschung von Produkten
 
 ## Autor
-Nils Wolters
+Nils Wolters  
 Erstellt für den Praxistag Anwendungsentwicklung.
